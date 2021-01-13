@@ -6,21 +6,8 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-  title = 'client';
-  wheather: any;
+export class AppComponent{
 
   constructor(private http: HttpClient) {}
-
-
-  ngOnInit() {
-    console.log("Init works");
-    this.http.get('https://localhost:44369/weatherforecast/').subscribe(response => {
-      this.wheather = response;
-    }, error => {
-      console.log(error);
-    })
-  }
-
   
 }
