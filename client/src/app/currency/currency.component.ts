@@ -34,7 +34,7 @@ export class CurrencyComponent implements OnInit, AfterViewInit  {
   ngOnInit() {
 
   this.currencyService.getLatest().subscribe(data => {
-    this.currencies.data = this.convertToArray(data.rates);
+    this.currencies.data = this.convertToArray(data);
   });
   }
 

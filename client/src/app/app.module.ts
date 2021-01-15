@@ -10,13 +10,15 @@ import { StocksComponent } from './stocks/stocks.component';
 import { CurrencyComponent } from './currency/currency.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { ShipRadarComponent } from './ship-radar/ship-radar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavComponent,
     StocksComponent,
-    CurrencyComponent
+    CurrencyComponent,
+    ShipRadarComponent
   ],
   imports: [
     BrowserModule,
