@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Ship } from '../models/ship.model';
 import { ShipService } from '../services/ship.service';
 import { getDistance } from 'geolib';
+import { BidiModule } from '@angular/cdk/bidi';
 
 @Component({
   selector: 'app-ship-radar',
@@ -10,36 +11,52 @@ import { getDistance } from 'geolib';
 })
 export class ShipRadarComponent implements OnInit {
 ships: Ship[];
-homeCoordinates: [latitude: number, longitude: number] = [28.320951, 61.058983];
+nearestShip: Ship;
+homeCoordinates: [longitude: number, latitude: number] = [28.320951, 61.058983];
 
   constructor(private shipService: ShipService) {
    }
 
   ngOnInit() {
     this.shipService.getLatest().subscribe((res: any) => {
-      this.ships = res.features;
+      this.ships = [...res.features];
       this.enterExtraData();
+      this.filterShips();
+      this.getNearestShip();
     });
+  }
+
+private getNearestShip() {
+  this.ships = this.ships.sort((a, b) => (a.distance > b.distance) ? 1 : -1)
+  this.nearestShip = this.ships[0]  
+}
+
+  private filterShips() {
+    this.ships = this.ships.filter(p => p.properties.isHeadingToMustola === true && (p.properties.navStat === 0 || 5 || 8))
   }
 
   private enterExtraData() {
     for (let ship of this.ships)
     {
       this.addDistanceFromMustola(ship);
-      this.isHeadingTowardsMustola(ship);
+      this.isHeadingToMustola(ship);
     }
   }
 
   private addDistanceFromMustola(ship: Ship) {
-    ship.properties.distance = getDistance(
-      {latitude: this.homeCoordinates[0], longitude: this.homeCoordinates[1]},
+    ship.distance = getDistance(
+      {latitude: this.homeCoordinates[1], longitude: this.homeCoordinates[0]},
       {latitude: ship.geometry.coordinates[1], longitude: ship.geometry.coordinates[0]});
   }
 
-  private isHeadingTowardsMustola(ship: Ship) {
-    console.log(ship);
-    // (lat < 61.0804652 and long > 28.2754649)) and ((((200 <= course <= 360) or course <= 10) and lat < homeLat and long > homeLong) or ((30 <= course <= 190) and lat > homeLat and long < homeLong)):
-
+  private isHeadingToMustola(ship: Ship) {
+    // Ship east from Mustola
+    if ((ship.geometry.coordinates[1] <= this.homeCoordinates[1]) && (ship.properties.cog < 30 || ship.properties.cog > 250)) {
+      ship.properties.isHeadingToMustola = true;
+    // Ship west from Mustola
+    } else if ((ship.geometry.coordinates[1] <= 61.08) && (ship.properties.cog > 50 && ship.properties.cog < 180)) {
+      ship.properties.isHeadingToMustola = true;
+    } else { ship.properties.isHeadingToMustola = false; }
   }
 
 }

@@ -7,7 +7,8 @@ export class Ship {
           public properties: 
             {cog: number, heading: number, mmsi: number, navStat: number, 
                 posAcc: boolean, raim: boolean, rot: number, sog: number,
-                timestamp: number, timestampExternal: number, distance?: number},
-          public type: string
+                timestamp: number, timestampExternal: number, isHeadingToMustola: boolean},
+          public type: string,
+          public distance: number
         ) {}
       }
