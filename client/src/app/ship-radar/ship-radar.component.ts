@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Ship } from '../models/ship.model';
 import { ShipService } from '../services/ship.service';
-import { getDistance } from 'geolib';
 
 @Component({
   selector: 'app-ship-radar',
@@ -22,6 +21,7 @@ homeCoordinates: [longitude: number, latitude: number] = [28.320951, 61.058983];
       this.enterExtraData();
       this.filterShips();
       this.nearestShip = this.getNearestShip();
+      console.log("Nearest ship: ", this.nearestShip)
     });
   }
 
@@ -43,9 +43,25 @@ private getNearestShip() {
   }
 
   private addDistanceFromMustola(ship: Ship) {
-    ship.distance = getDistance(
-      {latitude: this.homeCoordinates[1], longitude: this.homeCoordinates[0]},
-      {latitude: ship.geometry.coordinates[1], longitude: ship.geometry.coordinates[0]});
+    ship.distance = this.getDistanceFromLatLonInKm (this.homeCoordinates[1], this.homeCoordinates[0], ship.geometry.coordinates[1], ship.geometry.coordinates[0])
+  }
+
+  private getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+    var R = 6371; // Radius of the earth in km
+    var dLat = this.deg2rad(lat2-lat1);  // deg2rad below
+    var dLon = this.deg2rad(lon2-lon1); 
+    var a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2)
+      ; 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var d = R * c; // Distance in km
+    return d;
+  }
+
+  private deg2rad(deg) {
+    return deg * (Math.PI/180)
   }
 
   private isHeadingToMustola(ship: Ship) {
