@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Ship } from '../models/ship.model';
 import { ShipService } from '../services/ship.service';
 import { getDistance } from 'geolib';
-import { BidiModule } from '@angular/cdk/bidi';
 
 @Component({
   selector: 'app-ship-radar',
@@ -19,16 +18,16 @@ homeCoordinates: [longitude: number, latitude: number] = [28.320951, 61.058983];
 
   ngOnInit() {
     this.shipService.getLatest().subscribe((res: any) => {
-      this.ships = [...res.features];
+      this.ships = res.features;
       this.enterExtraData();
       this.filterShips();
-      this.getNearestShip();
+      this.nearestShip = this.getNearestShip();
     });
   }
 
 private getNearestShip() {
   this.ships = this.ships.sort((a, b) => (a.distance > b.distance) ? 1 : -1)
-  this.nearestShip = this.ships[0]  
+  return this.ships[0]  
 }
 
   private filterShips() {

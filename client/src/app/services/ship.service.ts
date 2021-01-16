@@ -9,8 +9,11 @@ export class ShipService {
   constructor(private http: HttpClient) { }
   
   getLatest() {
-    return this.http.get('https://meri.digitraffic.fi/api/v1/locations/latitude/60.915/longitude/28.42/radius/20/from/2020-01-15T16:18:00.000Z');
+    const timeNow = new Date(Date.now() - 10000).toISOString();
+    const coordinates = [60.915, 28.42];
+    const radius = 40;
+    const apiCall = 'https://meri.digitraffic.fi/api/v1/locations/latitude/' + coordinates[0] + '/longitude/' + coordinates[1] + '/radius/' + radius + '/from/' + timeNow
+    console.log("API CALL " + apiCall);
+    return this.http.get(apiCall);
   }
 }
-  // API kutsu mikä pitää tehdä.
-//https://meri.digitraffic.fi/api/v1/locations/latitude/61.058983/longitude/28.320951/radius/40/from/2020-01-15T16:18:00.000Z
