@@ -19,9 +19,13 @@ homeCoordinates: [longitude: number, latitude: number] = [28.320951, 61.058983];
     this.shipService.getLatest().subscribe((res: any) => {
       this.ships = res.features;
       this.enterExtraData();
+      console.log("Ships: ", this.ships)
+
       this.filterShips();
       this.nearestShip = this.getNearestShip();
       console.log("Nearest ship: ", this.nearestShip)
+      console.log("Ships: ", this.ships)
+
     });
   }
 
@@ -66,10 +70,11 @@ private getNearestShip() {
 
   private isHeadingToMustola(ship: Ship) {
     // Ship east from Mustola
-    if ((ship.geometry.coordinates[1] <= this.homeCoordinates[1]) && (ship.properties.cog < 30 || ship.properties.cog > 250)) {
+    // HomeCord: 61.05
+    if ((ship.geometry.coordinates[1] <= this.homeCoordinates[1]) && (ship.properties.cog <= 30 || ship.properties.cog >= 250)) {
       ship.properties.isHeadingToMustola = true;
     // Ship west from Mustola
-    } else if ((ship.geometry.coordinates[1] <= 61.08) && (ship.properties.cog > 50 && ship.properties.cog < 180)) {
+    } else if ((ship.geometry.coordinates[1] <= 61.08) && (ship.properties.cog >= 50 && ship.properties.cog <= 180)) {
       ship.properties.isHeadingToMustola = true;
     } else { ship.properties.isHeadingToMustola = false; }
   }

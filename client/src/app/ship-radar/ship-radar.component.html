@@ -1,10 +1,13 @@
 <p>ship-radar works!</p>
 <h2>Nearest ship</h2>
-<div class="row" id="shipData" *ngIf="nearestShip">
-    <div class="col-lg-4 col-md-4 col-sm-10 shipInfo">
-      <h4>Tietoa</h4>
-      <p><strong>MMSI: </strong>{{ nearestShip.mmsi }}</p>
-      <p><strong>Etäisyys Mustolasta: </strong>{{ nearestShip.distance }} <span>km</span> </p>
-    </div>
+
+<div *ngIf="nearestShip">
+    <h4>Tietoa</h4>
+    <p><strong>MMSI: </strong>{{ nearestShip.mmsi }}</p>
+    <p><strong>Etäisyys Mustolasta: </strong>{{ nearestShip.distance }} <span>km</span> </p>
 </div>
     
+<div *ngIf="!nearestShip">
+  <h4>Ship not found</h4>
+</div>
+  
