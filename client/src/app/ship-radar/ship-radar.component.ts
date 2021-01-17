@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { timer } from 'rxjs';
 import { Ship } from '../models/ship.model';
 import { ShipService } from '../services/ship.service';
 
@@ -16,18 +17,26 @@ homeCoordinates: [longitude: number, latitude: number] = [28.320951, 61.058983];
    }
 
   ngOnInit() {
+    this.timerToUpdateShips();
+  }
+
+
+private timerToUpdateShips() {
+  const updateTimer = timer(1, 3000);
+  updateTimer.subscribe(x => {
+    this.updateShips();
+  });
+}
+
+private updateShips() {
     this.shipService.getLatest().subscribe((res: any) => {
       this.ships = res.features;
       this.enterExtraData();
-      console.log("Ships: ", this.ships)
-
       this.filterShips();
       this.nearestShip = this.getNearestShip();
-      console.log("Nearest ship: ", this.nearestShip)
       console.log("Ships: ", this.ships)
-
     });
-  }
+}
 
 private getNearestShip() {
   this.ships = this.ships.sort((a, b) => (a.distance > b.distance) ? 1 : -1)

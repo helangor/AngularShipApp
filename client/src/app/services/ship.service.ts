@@ -13,7 +13,6 @@ export class ShipService {
     const coordinates = [60.915, 28.42];
     const radius = 20;
     const apiCall = 'https://meri.digitraffic.fi/api/v1/locations/latitude/' + coordinates[0] + '/longitude/' + coordinates[1] + '/radius/' + radius + '/from/' + timeNow
-    console.log("API CALL " + apiCall);
     return this.http.get(apiCall);
   }
 }
