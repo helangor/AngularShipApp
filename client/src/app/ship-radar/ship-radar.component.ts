@@ -11,6 +11,7 @@ import { ShipService } from '../services/ship.service';
 export class ShipRadarComponent implements OnInit {
 ships: Ship[];
 nearestShip: Ship;
+lastShip: Ship;
 homeCoordinates: [longitude: number, latitude: number] = [28.320951, 61.058983];
 
   constructor(private shipService: ShipService) {
@@ -34,13 +35,28 @@ private updateShips() {
       this.enterExtraData();
       this.filterShips();
       this.nearestShip = this.getNearestShip();
+      if (this.nearestShip.mmsi !== this.lastShip.mmsi)
+      {
+        this.getShipMetadata();
+      }
       console.log("Ships: ", this.ships)
-    });
+    })
 }
 
 private getNearestShip() {
   this.ships = this.ships.sort((a, b) => (a.distance > b.distance) ? 1 : -1)
   return this.ships[0]  
+}
+
+private getShipMetadata() {
+  this.shipService.getShipMetadata(this.nearestShip.mmsi).subscribe((res: any) => {
+    this.nearestShip.properties.name = res.name;
+    this.nearestShip.properties.destination = res.destination;
+    this.nearestShip.properties.imo = res.imo;
+    this.nearestShip.properties.shipType = res.shipType;
+    this.nearestShip.properties.draught = res.draught;
+    this.lastShip = this.nearestShip;
+  })
 }
 
   private filterShips() {
@@ -80,10 +96,10 @@ private getNearestShip() {
   private isHeadingToMustola(ship: Ship) {
     // Ship east from Mustola
     // HomeCord: 61.05
-    if ((ship.geometry.coordinates[1] <= this.homeCoordinates[1]) && (ship.properties.cog <= 30 || ship.properties.cog >= 250)) {
+    if ((ship.geometry.coordinates[0] >= this.homeCoordinates[0]) && (ship.properties.cog <= 30 || ship.properties.cog >= 250)) {
       ship.properties.isHeadingToMustola = true;
     // Ship west from Mustola
-    } else if ((ship.geometry.coordinates[1] <= 61.08) && (ship.properties.cog >= 50 && ship.properties.cog <= 180)) {
+    } else if ((ship.geometry.coordinates[0] <= this.homeCoordinates[0]) && (ship.properties.cog >= 50 && ship.properties.cog <= 180)) {
       ship.properties.isHeadingToMustola = true;
     } else { ship.properties.isHeadingToMustola = false; }
   }

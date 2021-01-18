@@ -1,12 +1,13 @@
 <h2>Nearest ship</h2>
 
-<div *ngIf="nearestShip">
+<div *ngIf="lastShip">
     <h4>Tietoa</h4>
-    <p><strong>MMSI: </strong>{{ nearestShip.mmsi }}</p>
-    <p><strong>Etäisyys Mustolasta: </strong>{{ nearestShip.distance }} <span>km</span> </p>
+    <p><strong>Name: </strong>{{ lastShip.properties.name }}</p>
+    <p><strong>MMSI: </strong>{{ lastShip.mmsi }}</p>
+    <p><strong>Etäisyys Mustolasta: </strong>{{ lastShip.distance }} <span>km</span> </p>
 </div>
     
-<div *ngIf="!nearestShip">
+<div *ngIf="!lastShip">
   <h4>Ship not found</h4>
 </div>
   

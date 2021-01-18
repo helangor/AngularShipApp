@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { mapToMapExpression } from '@angular/compiler/src/render3/util';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -13,6 +14,11 @@ export class ShipService {
     const coordinates = [60.915, 28.42];
     const radius = 20;
     const apiCall = 'https://meri.digitraffic.fi/api/v1/locations/latitude/' + coordinates[0] + '/longitude/' + coordinates[1] + '/radius/' + radius + '/from/' + timeNow
+    return this.http.get(apiCall);
+  }
+
+  getShipMetadata(mmsi: number) {
+    const apiCall = 'https://meri.digitraffic.fi/api/v1/metadata/vessels/' + mmsi;
     return this.http.get(apiCall);
   }
 }
