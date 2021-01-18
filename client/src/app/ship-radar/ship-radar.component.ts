@@ -18,28 +18,28 @@ homeCoordinates: [longitude: number, latitude: number] = [28.320951, 61.058983];
    }
 
   ngOnInit() {
+    this.updateShips(true);
     this.timerToUpdateShips();
   }
 
 
 private timerToUpdateShips() {
-  const updateTimer = timer(1, 3000);
+  const updateTimer = timer(3000, 3000);
   updateTimer.subscribe(x => {
-    this.updateShips();
+    this.updateShips(false);
   });
 }
 
-private updateShips() {
+private updateShips(firstInit: boolean) {
     this.shipService.getLatest().subscribe((res: any) => {
       this.ships = res.features;
       this.enterExtraData();
       this.filterShips();
       this.nearestShip = this.getNearestShip();
-      if (this.nearestShip.mmsi !== this.lastShip.mmsi)
+      if (firstInit || (this.nearestShip.mmsi !== this.lastShip.mmsi))
       {
         this.getShipMetadata();
       }
-      console.log("Ships: ", this.ships)
     })
 }
 
