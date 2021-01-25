@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { timer } from 'rxjs';
+import { forkJoin, timer } from 'rxjs';
 import { Ship } from '../models/ship.model';
-import { ShipExtraDataService } from '../services/ship-extra-data.service';
 import { ShipService } from '../services/ship.service';
 
 @Component({
@@ -12,15 +11,26 @@ import { ShipService } from '../services/ship.service';
 export class ShipRadarComponent implements OnInit {
   ships: Ship[];
   nearestShip: Ship;
+  lastShip: Ship;
   items: any;
+  loading: boolean = true;
   homeCoordinates: [longitude: number, latitude: number] = [28.320951, 61.058983];
 
-  constructor(private shipService: ShipService, private shipExtraDataService: ShipExtraDataService) {
+  constructor(private shipService: ShipService) {
   }
 
   ngOnInit() {
+    this.shipService.getLatest().subscribe((res: any) => {
+      this.ships = res.features;
+      this.enterExtraData();
+      this.filterShips();
+      this.nearestShip = this.getNearestShip();
+      this.getShipMetadata();
+      this.lastShip = this.nearestShip;
+      console.log("LAST:", this.lastShip);
+      this.loading = false;
+    })
     this.timerToUpdateShips();
-    this.getShipDataFromDatabase();
   }
 
   private timerToUpdateShips() {
@@ -30,21 +40,17 @@ export class ShipRadarComponent implements OnInit {
     });
   }
 
-  private getShipDataFromDatabase() {
-    this.shipExtraDataService.getExtraData(123).subscribe((res: any) => {
-      console.log("RES ", res);
-    })
-  }
-
   private updateShips() {
     this.shipService.getLatest().subscribe((res: any) => {
       this.ships = res.features;
       this.enterExtraData();
       this.filterShips();
       this.nearestShip = this.getNearestShip();
-      console.log("NEAREST: ", this.nearestShip)
-      if (this.nearestShip) {
+      if (this.nearestShip.mmsi === this.lastShip.mmsi) {
+        this.lastShip.distance = this.nearestShip.distance
+      } else {
         this.getShipMetadata();
+        this.lastShip = this.nearestShip;
       }
     })
   }
@@ -55,12 +61,20 @@ export class ShipRadarComponent implements OnInit {
   }
 
   private getShipMetadata() {
-    this.shipService.getShipMetadata(this.nearestShip.mmsi).subscribe((res: any) => {
-      this.nearestShip.properties.name = res.name;
-      this.nearestShip.properties.destination = res.destination;
-      this.nearestShip.properties.imo = res.imo;
-      this.nearestShip.properties.shipType = res.shipType;
-      this.nearestShip.properties.draught = res.draught;
+    forkJoin({
+      shipApiData: this.shipService.getShipMetadata(this.nearestShip.mmsi), 
+      shipDbData: this.shipService.getShipMetadataDB(this.nearestShip.mmsi)})
+      .subscribe((res: any) => {
+        console.log("RES: ", res);
+      this.nearestShip.properties.name = res.shipApiData.name;
+      this.nearestShip.properties.destination = res.shipApiData.destination;
+      this.nearestShip.properties.imo = res.shipApiData.imo;
+      this.nearestShip.properties.shipType = res.shipApiData.shipType;
+      this.nearestShip.properties.draught = res.shipApiData.draught;
+      this.nearestShip.properties.length = res.shipDbData.length;
+      this.nearestShip.properties.width = res.shipDbData.width;
+      this.nearestShip.properties.flag = res.shipDbData.flag;
+      this.nearestShip.properties.image = res.shipDbData.image;
     })
   }
 

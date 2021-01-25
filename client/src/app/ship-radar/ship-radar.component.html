@@ -1,13 +1,22 @@
 <h2>Nearest ship</h2>
 
-<div *ngIf="nearestShip">
+<div *ngIf="lastShip && !loading">
     <h4>Tietoa</h4>
-    <p><strong>Name: </strong>{{ nearestShip.properties.name }}</p>
-    <p><strong>MMSI: </strong>{{ nearestShip.mmsi }}</p>
-    <p><strong>Etäisyys Mustolasta: </strong>{{ nearestShip.distance }} <span>km</span> </p>
+    <p><strong>Name: </strong>{{ lastShip.properties.name }}</p>
+    <p><strong>MMSI: </strong>{{ lastShip.mmsi }}</p>
+    <p><strong>Destination: </strong>{{ lastShip.properties.destination }}</p>
+    <p><strong>Etäisyys Mustolasta: </strong>{{ lastShip.distance }} <span>km</span> </p>
+    <p><strong>length: </strong>{{ lastShip.properties.length }}</p>
+    <p><strong>width: </strong>{{ lastShip.properties.width }}</p>
+    <p><strong>flag: </strong>{{ lastShip.properties.flag }}</p>
+    <img src="{{lastShip.properties.image}}" alt="ship photo">
 </div>
     
-<div *ngIf="!nearestShip">
+<div *ngIf="!lastShip  && !loading">
   <h4>Ship not found</h4>
+</div>
+
+<div *ngIf="loading">
+  <h4>Loading</h4>
 </div>
   
