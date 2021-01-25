@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "laivatutkaextradata": {
+      "hosting": {
+        "client": [
+          "laivatutkaextradata"
+        ]
+      }
+    }
+  }
+}
