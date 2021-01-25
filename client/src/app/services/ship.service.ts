@@ -13,12 +13,16 @@ export class ShipService {
     const coordinates = [60.915, 28.42];
     const radius = 60;
     const apiCall = 'https://meri.digitraffic.fi/api/v1/locations/latitude/' + coordinates[0] + '/longitude/' + coordinates[1] + '/radius/' + radius + '/from/' + timeNow
-    console.log(apiCall);
     return this.http.get(apiCall);
   }
 
   getShipMetadata(mmsi: number) {
     const apiCall = 'https://meri.digitraffic.fi/api/v1/metadata/vessels/' + mmsi;
+    return this.http.get(apiCall);
+  }
+
+  getShipMetadataDB(mmsi: number) {
+    const apiCall = 'https://localhost:44336/api/Ships/' + mmsi;
     return this.http.get(apiCall);
   }
 }
