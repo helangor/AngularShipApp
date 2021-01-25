@@ -5,7 +5,9 @@ export class Ship {
           public mmsi: number,
           public geometry?: {type: string, coordinates: [longitude: number, latitude: number]},
           public properties?: 
-            {cog: number, name: string, destination: string, imo: number, shipType: number, draught: number, heading: number, mmsi: number, navStat: number, 
+            {cog: number, name: string, destination: string, imo: number, shipType: number, draught: number, 
+                heading: number, mmsi: number, navStat: number, 
+                length: number, width: number, flag: string, image: string,
                 posAcc: boolean, raim: boolean, rot: number, sog: number,
                 timestamp: number, timestampExternal: number, isHeadingToMustola: boolean},
           public type?: string,
