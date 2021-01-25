@@ -38,6 +38,19 @@ namespace API.Controllers
             return ship;
         }
 
+        [HttpGet("{mmsi}")]
+        public ActionResult<Ship> GetWithMmsi(int mmsi)
+        {
+            var ship = _shipService.GetWithMmsi(mmsi);
+
+            if (ship == null)
+            {
+                return NotFound();
+            }
+
+            return ship;
+        }
+
         [HttpPost]
         public ActionResult<Ship> Create(Ship ship)
         {

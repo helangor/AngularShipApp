@@ -13,9 +13,7 @@ namespace API.Services
 
         public ShipService(IShipsDatabaseSettings settings)
         {
-            //var client = new MongoClient(settings.ConnectionString);
-            var client = new MongoClient("mongodb://localhost:27017");
-
+            var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
             _ships = database.GetCollection<Ship>(settings.ShipsCollectionName);
@@ -26,6 +24,9 @@ namespace API.Services
 
         public Ship Get(string id) =>
             _ships.Find<Ship>(ship => ship.Id == id).FirstOrDefault();
+
+        public Ship GetWithMmsi(int mmsi) =>
+            _ships.Find<Ship>(ship => ship.mmsi == mmsi).FirstOrDefault();
 
         public Ship Create(Ship ship)
         {
