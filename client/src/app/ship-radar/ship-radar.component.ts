@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { forkJoin, timer } from 'rxjs';
 import { Ship } from '../models/ship.model';
 import { ShipService } from '../services/ship.service';
+import { AgmCoreModule } from '@agm/core';
 
 @Component({
   selector: 'app-ship-radar',
   templateUrl: './ship-radar.component.html',
+  styles: ['agm-map {height: 300px;}'],
   styleUrls: ['./ship-radar.component.scss']
 })
 export class ShipRadarComponent implements OnInit {
@@ -47,7 +49,8 @@ export class ShipRadarComponent implements OnInit {
       this.filterShips();
       this.nearestShip = this.getNearestShip();
       if (this.nearestShip.mmsi === this.lastShip.mmsi) {
-        this.lastShip.distance = this.nearestShip.distance
+        this.lastShip.distance = this.nearestShip.distance;
+        this.lastShip.geometry = this.nearestShip.geometry;
       } else {
         this.getShipMetadata();
         this.lastShip = this.nearestShip;

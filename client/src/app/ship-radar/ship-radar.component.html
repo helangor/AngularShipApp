@@ -10,8 +10,9 @@
     <p><strong>width: </strong>{{ lastShip.properties.width }}</p>
     <p><strong>flag: </strong>{{ lastShip.properties.flag }}</p>
     <img src="{{lastShip.properties.image}}" alt="ship photo">
+    <agm-map [latitude]="lastShip.geometry.coordinates[1]" [longitude]="lastShip.geometry.coordinates[0]"></agm-map>
 </div>
-    
+
 <div *ngIf="!lastShip  && !loading">
   <h4>Ship not found</h4>
 </div>

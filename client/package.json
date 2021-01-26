@@ -11,6 +11,7 @@
   },
   "private": true,
   "dependencies": {
+    "@agm/core": "^3.0.0-beta.0",
     "@angular/animations": "~11.0.6",
     "@angular/cdk": "^11.0.3",
     "@angular/common": "~11.0.6",
@@ -23,6 +24,7 @@
     "@angular/platform-browser-dynamic": "~11.0.6",
     "@angular/router": "~11.0.6",
     "@types/lodash": "^4.14.167",
+    "@angular/google-maps": "^11.0.0",
     "finnhub": "^1.2.1",
     "firebase": "^8.2.4",
     "rxjs": "~6.6.0",
@@ -48,6 +50,7 @@
     "tslint": "~6.1.0",
     "typescript": "~4.0.2",
     "@angular-devkit/architect": ">= 0.900 < 0.1200",
+    "@types/googlemaps": "3.39.12",
     "firebase-tools": "^8.0.0",
     "fuzzy": "^0.1.3",
     "inquirer": "^6.2.2",
