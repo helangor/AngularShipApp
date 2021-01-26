@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { forkJoin, timer } from 'rxjs';
 import { Ship } from '../models/ship.model';
 import { ShipService } from '../services/ship.service';
-import { AgmCoreModule } from '@agm/core';
 
 @Component({
   selector: 'app-ship-radar',
@@ -15,6 +14,8 @@ export class ShipRadarComponent implements OnInit {
   nearestShip: Ship;
   lastShip: Ship;
   items: any;
+  
+
   loading: boolean = true;
   homeCoordinates: [longitude: number, latitude: number] = [28.320951, 61.058983];
 
