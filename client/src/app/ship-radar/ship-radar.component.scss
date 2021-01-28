@@ -1,0 +1,41 @@
+.main {
+    background-color:lightgray;
+    background-image: url('https://images.pexels.com/photos/33689/ship-boat-lake-garda-italy.jpg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+    background-size: auto;
+    background-repeat: no-repeat;
+    padding: 20px;
+}
+
+.mat-toolbar {
+    padding: 10px;
+    background-color:rgba(0,0,0,.15);
+}
+
+.center-cropped {
+    object-fit: none; /* Do not scale the image */
+    object-position: center; /* Center the image within the element */
+}
+
+
+
+@media only screen and (min-width: 600px) {
+    .center-cropped {
+        height: 40vh;
+        width: 40vw;
+      }
+      .map {
+        height: 70vh; 
+        width: 40vw;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .center-cropped {
+        height: 50vh;
+        width: 80vw;
+      }
+      .map {
+        height: 70vh; 
+        width: 80vw;
+    }
+}
