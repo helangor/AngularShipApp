@@ -1,41 +1,42 @@
+<div class="main">
+  <mat-toolbar color="primary">
+    <a href="/ships" mat-button>Laivatutka</a>
+    <a href="/info" mat-button>Info</a>
+  </mat-toolbar>
 
-<div *ngIf="lastShip && !loading" fxLayout="column" fxLayoutAlign="center center">
-  <div fxLayout="row" fxLayoutAlign="center center">
-    <div fxFlex>
-      <h2>Nearest ship</h2>
-      <h4>Tietoa</h4>
-      <p><strong>Name: </strong>{{ lastShip.properties.name }}</p>
-      <p><strong>MMSI: </strong>{{ lastShip.mmsi }}</p>
-      <p><strong>Destination: </strong>{{ lastShip.properties.destination }}</p>
-      <p><strong>Etäisyys Mustolasta: </strong>{{ lastShip.distance }} <span>km</span> </p>
-      <p><strong>length: </strong>{{ lastShip.properties.length }}</p>
+  <div *ngIf="lastShip && !loading" fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="center center"
+    style="margin-top: 20px;">
+    <div fxLayout="column" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutGap="40px">
+      <div fxFlex>
+        <h2>Lähin laiva</h2>
+        <p><strong>Name: </strong>{{ lastShip.properties.name }}</p>
+        <p><strong>MMSI: </strong>{{ lastShip.mmsi }}</p>
+        <p><strong>Destination: </strong>{{ lastShip.properties.destination }}</p>
+        <p><strong>Etäisyys Mustolasta: </strong>{{ lastShip.distance | number:'1.0-1'}} <span>km</span> </p>
+        <p><strong>length: </strong>{{ lastShip.properties.length }} metriä</p>
+      </div>
+      <img class="center-cropped" src="{{lastShip.properties.image}}" alt="ship photo"
+        onerror="this.src='assets/default.png'">
     </div>
-    <div fxFlex>
-      <img src="{{lastShip.properties.image}}" alt="ship photo">
-    </div>
-  </div>
 
-  <div fxFlex>
-    <h1>I AM HERE</h1>
-    <agm-map [latitude]="lastShip.geometry.coordinates[1]" [longitude]="lastShip.geometry.coordinates[0]">
-      <agm-marker [latitude]="lastShip.geometry.coordinates[1]" [longitude]="lastShip.geometry.coordinates[0]"
-        iconUrl="../assets/ship.png">
-        <agm-info-window>
-          <strong>InfoWindow content</strong>
-          <p><strong>Etäisyys Mustolasta: </strong>{{ lastShip.distance }} <span>km</span> </p>
-          <p><strong>width: </strong>{{ lastShip.properties.width }}</p>
-          <p><strong>flag: </strong>{{ lastShip.properties.flag }}</p>
-        </agm-info-window>
-      </agm-marker>
-    </agm-map>
+
+    <div fxLayout="column" fxLayoutAlign="center center" style="margin: 20px;">
+      <agm-map [latitude]="lastShip.geometry.coordinates[1]" [longitude]="lastShip.geometry.coordinates[0]" [zoom]=12 class="map">
+        <agm-marker [latitude]="lastShip.geometry.coordinates[1]" [longitude]="lastShip.geometry.coordinates[0]"
+          iconUrl="../assets/ship.png">
+          <agm-info-window>
+            <strong>{{ lastShip.properties.name }}</strong>
+            <p><strong>Etäisyys Mustolasta: </strong>{{ lastShip.distance | number:'1.0-1' }} <span>km</span> </p>
+            <p><strong>Leveys: </strong>{{ lastShip.properties.width }} metriä</p>
+            <p><strong>Lippu: </strong>{{ lastShip.properties.flag }}</p>
+            <p><strong>Nopeus: </strong>{{ lastShip.properties.sog }} solmua</p>
+          </agm-info-window>
+        </agm-marker>
+      </agm-map>
+    </div>
   </div>
 </div>
 
-
-<div *ngIf="!lastShip  && !loading">
-  <h4>Ship not found</h4>
-</div>
-
-<div *ngIf="loading">
+<div *ngIf="loading" fxLayout="column" fxLayoutAlign="center center" style="margin-top: 20px;">
   <h4>Loading</h4>
 </div>
