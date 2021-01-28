@@ -6,7 +6,6 @@ import { ShipService } from '../services/ship.service';
 @Component({
   selector: 'app-ship-radar',
   templateUrl: './ship-radar.component.html',
-  styles: ['agm-map {height: 300px;}'],
   styleUrls: ['./ship-radar.component.scss']
 })
 export class ShipRadarComponent implements OnInit {
@@ -49,9 +48,11 @@ export class ShipRadarComponent implements OnInit {
       this.enterExtraData();
       this.filterShips();
       this.nearestShip = this.getNearestShip();
+      console.log("SHIP ", this.nearestShip);
       if (this.nearestShip.mmsi === this.lastShip.mmsi) {
         this.lastShip.distance = this.nearestShip.distance;
         this.lastShip.geometry = this.nearestShip.geometry;
+        this.lastShip.properties.sog = this.nearestShip.properties.sog;
       } else {
         this.getShipMetadata();
         this.lastShip = this.nearestShip;
@@ -60,7 +61,7 @@ export class ShipRadarComponent implements OnInit {
   }
 
   private getNearestShip() {
-    this.ships = this.ships.sort((a, b) => (a.distance > b.distance) ? 1 : -1)
+    //this.ships = this.ships.sort((a, b) => (a.distance > b.distance) ? 1 : -1)
     return this.ships[0]
   }
 
